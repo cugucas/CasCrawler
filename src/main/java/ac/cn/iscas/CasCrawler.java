@@ -16,12 +16,12 @@ import us.codecraft.webmagic.processor.example.GithubRepoPageProcessor;
  **/
 public class CasCrawler {
     public static void main(String[] args) {
-        //Spider.create(new CasPageProcess()).addUrl("http://www.cas.cn/syky/index.shtml").thread(1).run();
-        OOSpider ooSpider = OOSpider.create(Site.me().setCharset("utf-8"), new ConsolePageModelPipeline(), KyjzBean.class);
-
-        KyjzBean qidian= ooSpider.get("http://www.cas.cn/syky/index.shtml");
-
-        System.out.println(qidian);
+        Spider.create(new CasPageProcess()).addUrl("http://www.cas.cn/syky/index.shtml").thread(1).run();
+//        OOSpider ooSpider = OOSpider.create(Site.me().setCharset("utf-8"), new ConsolePageModelPipeline(), KyjzBean.class);
+//
+//        KyjzBean qidian= ooSpider.get("http://www.cas.cn/syky/index.shtml");
+//
+//        System.out.println(qidian.getTitle());
 
     }
 
