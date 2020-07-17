@@ -13,4 +13,10 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'us.codecraft', name: 'webmagic-core', version: '0.7.3'
     compile group: 'us.codecraft', name: 'webmagic-extension', version: '0.7.3'
+
+    compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile group: 'com.huaban', name: 'jieba-analysis', version: '1.0.0'
+    compile 'edu.stanford.nlp:stanford-corenlp:3.4.1'
+
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.7'
 }
