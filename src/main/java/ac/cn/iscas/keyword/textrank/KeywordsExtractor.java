@@ -60,7 +60,7 @@ public class KeywordsExtractor {
         }
         // 2. rank
         uwg.rank();
-        List<Node> list = uwg.topk(10);
+        List<Node> list = uwg.topk(5);
         List<String> keywords = new ArrayList<>();
         list.forEach(t -> {
             keywords.add(t.label);

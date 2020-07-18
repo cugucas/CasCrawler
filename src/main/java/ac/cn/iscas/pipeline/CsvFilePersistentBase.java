@@ -4,6 +4,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -32,9 +33,27 @@ public class CsvFilePersistentBase {
     }
 
     public void init(String path, String header) throws IOException {
-        CSVFormat format = CSVFormat.DEFAULT.withHeader(header);
-        Writer writer = Files.newBufferedWriter(Paths.get(path));
-        this.csvPrinter = new CSVPrinter(writer, format);
+        CSVFormat format = CSVFormat.EXCEL.withHeader(header);
+
+        FileWriter fileWriter = null;
+        File file = new File(path);
+        try {
+            if (!file.getParentFile().exists()){
+                file.getParentFile().mkdirs();
+            }
+            fileWriter = new FileWriter(path);
+            //BOM的UTF-8 头 防止Excel打开乱码
+            byte[] uft8bom={(byte)0xef,(byte)0xbb,(byte)0xbf};
+            fileWriter.write(new String(uft8bom));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            this.csvPrinter = new CSVPrinter(fileWriter, format);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

@@ -4,10 +4,8 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -31,6 +29,11 @@ public class CsvFilePipeline extends CsvFilePersistentBase implements Pipeline {
         }
         Map<String, Object> resultMap = resultItems.getAll();
         String header = resultMap.keySet().stream().collect(Collectors.joining(","));
+        //String row = resultMap.values().stream().map(Object::toString).collect(Collectors.joining(","));
+        Object[] row = resultMap.values().toArray(new Object[resultMap.size()]);
+
+
+
 
         if (csvPrinter == null) {
             String filepath=new StringBuilder().append(this.path).
@@ -43,7 +46,7 @@ public class CsvFilePipeline extends CsvFilePersistentBase implements Pipeline {
             }
         }
         try {
-            csvPrinter.printRecord();
+            csvPrinter.printRecord(row);
             csvPrinter.flush();
 
         } catch (IOException e) {
