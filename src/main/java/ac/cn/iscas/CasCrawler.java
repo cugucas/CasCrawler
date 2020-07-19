@@ -13,11 +13,9 @@ import us.codecraft.webmagic.model.OOSpider;
 import us.codecraft.webmagic.pipeline.FilePipeline;
 import us.codecraft.webmagic.processor.example.GithubRepoPageProcessor;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: CasCrawler
@@ -27,7 +25,55 @@ import java.util.Map;
  **/
 public class CasCrawler {
     public static void main(String[] args) throws IOException {
-        new CasCrawler().crawSykyPages();
+        File downloadFile = new File("D:\\科研进展\\20200718_statistic.csv");
+        String[] header = new String[] {"单位名称", "标题", "发布时间", "链接", "关键字", "发表篇数"};
+        List<List<String>> rows = CsvFileUtils.readCsvFile(downloadFile, header, 1);
+        List<StatisticInfo> objRows = new ArrayList<>();
+        int pubSum = 0;
+        for (List<String> row : rows) {
+            StatisticInfo statisticInfo = new StatisticInfo();
+            statisticInfo.setUnit(row.get(0));
+            statisticInfo.setTitle(row.get(1));
+            statisticInfo.setTime(row.get(2));
+            statisticInfo.setUrl(row.get(3));
+            statisticInfo.setKeyword(row.get(4));
+            statisticInfo.setPubNum(Integer.parseInt(row.get(5)));
+            pubSum += Integer.parseInt(row.get(5));
+            objRows.add(statisticInfo);
+        }
+        Collections.sort(objRows, Collections.reverseOrder());
+        Map<String, StatisticInfo> map = new LinkedHashMap<>();
+        for (StatisticInfo info: objRows) {
+            map.put(info.getUnit(), info);
+        }
+
+        int rank = 1;
+        int order = 1;
+        int latestPubNum = 0;
+        String[] statheader = new String[] {"排名", "单位", "发表篇数"};
+        List<String[]> statRows = new ArrayList<>();
+
+        for(Map.Entry<String, StatisticInfo> entry : map.entrySet()) {
+            String unitName = entry.getKey();
+            Integer pubNum = entry.getValue().getPubNum();
+
+            if (pubNum == latestPubNum) {
+            } else {
+                rank = order;
+            }
+            String row = String.format("[%s]\t排名第%d位\t发表文章%d篇", unitName, rank, pubNum);
+            statRows.add(new String[]{String.valueOf(rank), unitName, String.valueOf(pubNum)});
+            System.out.println(row);
+            order++;
+            latestPubNum = pubNum;
+        }
+        String totalTime = String.format("总计");
+        String totalUnit = String.format("2020-01-01 至 2020-07-15有%d家单位发表科研进展类文章", map.size());
+        String totalPaper = String.format("%d篇", objRows.size());
+        statRows.add(new String[]{totalTime, totalUnit, totalPaper});
+        CsvFileUtils.writeCsv(statheader, statRows, "D:\\科研进展\\统计");
+
+        //new CasCrawler().crawSykyPages();
     }
 
     public void crawSykyPages() throws IOException {
@@ -60,5 +106,9 @@ public class CasCrawler {
 
         CsvFileUtils.writeCsv(header, rows, "D:\\科研进展");
     }
+
+//    public int getRange(String key) {
+//        List<>
+//    }
 
 }

@@ -7,10 +7,24 @@ public class StatisticInfo implements Comparable<StatisticInfo>{
     private String unit;
     private String keyword;
     private String url;
+    private Integer pubNum;
+
+//    @Override
+//    public int compareTo(StatisticInfo o) {
+//        return getTime().compareTo(o.getTime());
+//    }
 
     @Override
     public int compareTo(StatisticInfo o) {
-        return getTime().compareTo(o.getTime());
+        return getPubNum().compareTo(o.getPubNum());
+    }
+
+    public Integer getPubNum() {
+        return pubNum;
+    }
+
+    public void setPubNum(Integer pubNum) {
+        this.pubNum = pubNum;
     }
 
     public String getTitle() {
